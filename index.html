@@ -133,6 +133,18 @@
             color: var(--secondary-color);
         }
 
+        /* AI问答按钮特殊样式 */
+        .ai-link {
+            background-color: rgba(242, 201, 76, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            border: 1px solid var(--secondary-color);
+        }
+
+        .ai-link:hover {
+            background-color: rgba(242, 201, 76, 0.3);
+        }
+
         /* 移动端导航适配 */
         @media (max-width: 1200px) {
             body {
@@ -630,6 +642,13 @@
                     云锦相关传说
                 </a>
             </li>
+            <!-- 新增：AI问答入口 -->
+            <li>
+                <a href="AI.html" class="sidebar-link">
+                    <i class="fas fa-robot sidebar-icon"></i>
+                    AI问答聊云锦
+                </a>
+            </li>
         </ul>
     </aside>
 
@@ -654,6 +673,10 @@
                 <li><a href="#history">历史渊源</a></li>
                 <li><a href="#craft">工艺特色</a></li>
                 <li><a href="#patterns">经典纹样</a></li>
+                <!-- 新增：导航栏AI问答入口 -->
+                <li><a href="AI.html" class="ai-link" target="_blank">
+                    <i class="fas fa-robot"></i> AI问答
+                </a></li>
             </ul>
         </div>
     </nav>
@@ -664,6 +687,10 @@
             <h1>云锦 · 千年织就的东方瑰宝</h1>
             <p>一缕丝线，织就盛世华章；一抹云锦，承载千年文脉</p>
             <a href="#story" class="btn">聆听云锦故事</a>
+            <!-- 可选：在Banner区域也添加AI问答按钮 -->
+            <a href="AI.html" class="detail-btn" style="margin-left: 1rem;" target="_blank">
+                <i class="fas fa-robot"></i> 与AI聊聊云锦
+            </a>
         </div>
     </section>
 
@@ -793,7 +820,7 @@
     <footer>
         <div class="footer-content">
             <h3>云锦华章</h3>
-            <p>© 金陵织鸭团队 版权所有</p>
+            <p>© 城纹织忆团队 版权所有</p>
             <p>一寸云锦一寸金，千年文脉永流传</p>
         </div>
     </footer>
@@ -879,23 +906,5 @@
             });
         });
     </script>
-    <script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.2.0-beta.19/libs/cn/index.js"></script>
-<script>
-  new CozeWebSDK.WebChatClient({
-    config: {
-      bot_id: '7618176804423335974',
-    },
-    componentProps: {
-      title: '织鸭',
-    },
-    auth: {
-      type: 'token',
-      token: 'pat_GUMhY8oahxmvLNziNq8vOpz7GBLJKYlQLvvpCJHUa0NThZlP6u6rL5ZTds5m7Gmq',
-      onRefreshToken: function () {
-        return 'pat_GUMhY8oahxmvLNziNq8vOpz7GBLJKYlQLvvpCJHUa0NThZlP6u6rL5ZTds5m7Gmq'
-      }
-    }
-  });
-</script>
 </body>
 </html>
