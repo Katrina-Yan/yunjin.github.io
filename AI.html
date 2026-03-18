@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>织鸭AI问答</title>
+<title>南京云锦 · 金陵知鸭AI问答</title>
 <style>
 * {
     margin: 0;
@@ -13,10 +13,9 @@
 }
 
 body {
-    /* 核心修改：将鸭子图片作为背景，添加渐变遮罩提升文字可读性 */
     background: linear-gradient(rgba(253,251,246,0.95), rgba(253,251,246,0.95)),
         url("https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/b0c4c12063654a8aa6bd0449b9316359.jpg~tplv-a9rns2rl98-image.png?lk3s=8e244e95&rcl=20260317225045C56B0BBBDA60533C3EB7&rrcfp=dafada99&x-expires=2089983045&x-signature=abSwiFBSaQs%2BIaRm2J3f%2BeSWPjA%3D");
-    background-size: 400px; /* 背景图尺寸适配 */
+    background-size: 400px;
     background-repeat: repeat;
     background-position: center;
     min-height: 100vh;
@@ -26,12 +25,46 @@ body {
     position: relative;
 }
 
-/* 主容器 - 核心放大修改 */
+/* 调整：返回首页按钮样式（移至右上角） */
+.back-home-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px; /* 核心修改：left → right */
+    z-index: 999; /* 确保在最上层 */
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #663366, #995577);
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(102, 51, 102, 0.2);
+    transition: all 0.2s ease;
+}
+.back-home-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(102, 51, 102, 0.3);
+}
+.back-home-btn:active {
+    transform: translateY(0);
+}
+/* 移动端适配按钮大小 */
+@media (max-width: 600px) {
+    .back-home-btn {
+        padding: 8px 16px;
+        font-size: 13px;
+        top: 15px;
+        right: 15px; /* 移动端同步调整为right */
+    }
+}
+
 .chat-box {
-    width: 90%; /* 从100%改为90%，大屏更宽 */
-    max-width: 900px; /* 从720px放大到900px，横向空间增加 */
-    height: 92vh; /* 从85vh提升到92vh，垂直空间更大 */
-    background: rgba(255, 255, 255, 0.92); /* 增加背景透明度，透出鸭子背景 */
+    width: 90%;
+    max-width: 900px;
+    height: 92vh;
+    background: rgba(255, 255, 255, 0.92);
     border-radius: 16px;
     box-shadow: 0 8px 30px rgba(102, 51, 102, 0.15);
     border: 1px solid #e2d3d8;
@@ -40,25 +73,23 @@ body {
     overflow: hidden;
     position: relative;
     z-index: 1;
-    margin-top: 10px; /* 微调顶部间距，适配更大高度 */
+    margin-top: 10px;
 }
 
-/* 头部：云锦+鸭子风格 */
 .chat-header {
     background: linear-gradient(135deg, #663366, #995577);
     color: #fff;
-    padding: 20px 20px; /* 略微加高头部，适配大容器 */
+    padding: 20px 20px;
     text-align: center;
-    font-size: 22px; /* 字体略放大 */
+    font-size: 22px;
     letter-spacing: 1px;
     position: relative;
 }
 
-/* 鸭子图标装饰（用你指定的鸭子图） */
 .chat-header::before {
     content: "";
     position: absolute;
-    width: 40px; /* 头像略放大 */
+    width: 40px;
     height: 40px;
     background-image: url("https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/b0c4c12063654a8aa6bd0449b9316359.jpg~tplv-a9rns2rl98-image.png?lk3s=8e244e95&rcl=20260317225045C56B0BBBDA60533C3EB7&rrcfp=dafada99&x-expires=2089983045&x-signature=abSwiFBSaQs%2BIaRm2J3f%2BeSWPjA%3D");
     background-size: contain;
@@ -67,13 +98,13 @@ body {
     top: 50%;
     left: 20px;
     transform: translateY(-50%);
-    border-radius: 50%; /* 圆形头像效果 */
+    border-radius: 50%;
 }
 
 .chat-header::after {
     content: "";
     position: absolute;
-    width: 32px; /* 装饰图标略放大 */
+    width: 32px;
     height: 32px;
     background-image: url("https://img.icons8.com/fluency/96/ffffff/chinese-pattern.png");
     background-size: contain;
@@ -84,41 +115,67 @@ body {
     transform: translateY(-50%);
 }
 
-/* 消息区域 - 适配大容器 */
 .chat-messages {
     flex: 1;
-    padding: 30px 25px; /* 内边距加大，更宽松 */
+    padding: 30px 25px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 20px; /* 消息间距加大 */
-    background-color: rgba(250, 247, 244, 0.85); /* 半透明背景，透出鸭子图案 */
+    gap: 20px;
+    background-color: rgba(250, 247, 244, 0.85);
 }
 
-/* 消息气泡 - 适配大容器 */
 .msg {
-    max-width: 80%; /* 气泡最大宽度从75%提升到80% */
-    padding: 14px 18px; /* 内边距加大 */
-    border-radius: 14px; /* 圆角略放大 */
-    line-height: 1.7; /* 行高更舒适 */
-    font-size: 16px; /* 字体略放大 */
+    max-width: 80%;
+    padding: 14px 18px;
+    border-radius: 14px;
+    line-height: 1.7;
+    font-size: 16px;
     animation: fadeIn 0.3s ease forwards;
     opacity: 0;
     position: relative;
 }
 
-/* 鸭子头像装饰（AI消息左侧）- 固定头像位置，保留间距 */
+/* AI消息排版美化样式 */
+.ai-msg h3 {
+    color: #663366;
+    margin: 12px 0 8px 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+.ai-msg p {
+    margin: 8px 0;
+    line-height: 1.7;
+}
+.ai-msg ul {
+    margin: 8px 0 8px 20px;
+    padding: 0;
+}
+.ai-msg li {
+    margin: 4px 0;
+    line-height: 1.6;
+}
+.ai-msg strong {
+    color: #884466;
+}
+.ai-msg [data-type="highlight"] {
+    background: #f8f0f3;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #663366;
+}
+
 .ai-msg::before {
     content: "";
     position: absolute;
-    left: -40px; /* 固定头像位置，不随气泡右移 */
+    left: -40px;
     top: 50%;
     transform: translateY(-50%);
-    width: 35px; /* 头像略放大 */
+    width: 35px;
     height: 35px;
     background-image: url("https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/b0c4c12063654a8aa6bd0449b9316359.jpg~tplv-a9rns2rl98-image.png?lk3s=8e244e95&rcl=20260317225045C56B0BBBDA60533C3EB7&rrcfp=dafada99&x-expires=2089983045&x-signature=abSwiFBSaQs%2BIaRm2J3f%2BeSWPjA%3D");
     background-size: contain;
-    border-radius: 50%; /* 圆形头像 */
+    border-radius: 50%;
 }
 
 @keyframes fadeIn {
@@ -126,7 +183,6 @@ body {
     from { opacity: 0; transform: translateY(8px); }
 }
 
-/* 用户消息 */
 .user-msg {
     align-self: flex-end;
     background: linear-gradient(135deg, #663366, #884466);
@@ -134,22 +190,20 @@ body {
     border-bottom-right-radius: 4px;
 }
 
-/* AI消息（金陵知鸭风格）- 核心调整：气泡大幅右移，保留和头像的间距 */
 .ai-msg {
     align-self: flex-start;
     background: rgba(255, 255, 255, 0.9);
     color: #552233;
     border: 1px solid #e2d3d8;
     border-bottom-left-radius: 4px;
-    margin-left: 35px; /* 从20px改为35px，气泡继续右移，和头像保留约10px间距 */
+    margin-left: 35px;
     box-shadow: 0 2px 4px rgba(153, 85, 119, 0.05);
 }
 
-/* 输入框 - 适配大容器 */
 .chat-input {
     display: flex;
-    padding: 20px; /* 内边距加大 */
-    gap: 12px; /* 间距略加大 */
+    padding: 20px;
+    gap: 12px;
     border-top: 1px solid #eee;
     background: rgba(255, 255, 255, 0.95);
     position: relative;
@@ -158,11 +212,11 @@ body {
 
 #inputText {
     flex: 1;
-    padding: 16px 20px; /* 输入框内边距加大 */
+    padding: 16px 20px;
     border: 1px solid #d9c3cc;
     border-radius: 30px;
     outline: none;
-    font-size: 16px; /* 字体略放大 */
+    font-size: 16px;
     background: rgba(253,251,246,0.9);
     transition: border 0.2s;
 }
@@ -172,9 +226,8 @@ body {
     box-shadow: 0 0 0 2px rgba(153, 85, 119, 0.1);
 }
 
-/* 发送按钮 - 适配大容器 */
 #sendBtn {
-    padding: 16px 28px; /* 按钮内边距加大 */
+    padding: 16px 28px;
     background: linear-gradient(135deg, #663366, #884466);
     color: #fff;
     border: none;
@@ -182,7 +235,7 @@ body {
     font-weight: bold;
     cursor: pointer;
     transition: all 0.2s;
-    font-size: 16px; /* 字体略放大 */
+    font-size: 16px;
 }
 
 #sendBtn:hover {
@@ -195,9 +248,8 @@ body {
     transform: translateY(0);
 }
 
-/* 滚动条美化 - 适配大容器 */
 .chat-messages::-webkit-scrollbar {
-    width: 8px; /* 滚动条略加宽 */
+    width: 8px;
 }
 .chat-messages::-webkit-scrollbar-thumb {
     background: #d9c3cc;
@@ -207,12 +259,10 @@ body {
     background: #faf7f4;
 }
 
-/* Coze智能体悬浮按钮适配 */
 .coze-chat-widget {
     z-index: 9999 !important;
 }
 
-/* 移动端适配 - 同步调整 */
 @media (max-width: 600px) {
     .chat-box {
         width: 95%;
@@ -229,10 +279,10 @@ body {
     .ai-msg::before {
         width: 30px;
         height: 30px;
-        left: -35px; /* 移动端头像位置固定 */
+        left: -35px;
     }
     .ai-msg {
-        margin-left: 25px; /* 移动端气泡同步右移，保留间距 */
+        margin-left: 25px;
     }
     #inputText {
         padding: 14px 18px;
@@ -242,13 +292,19 @@ body {
         padding: 14px 24px;
         font-size: 15px;
     }
+    /* 移动端适配排版 */
+    .ai-msg h3 {
+        font-size: 16px;
+    }
 }
 </style>
 </head>
 <body>
+<!-- 返回首页按钮 -->
+<button class="back-home-btn" onclick="goToHomePage()">返回首页</button>
 
 <div class="chat-box">
-    <div class="chat-header">织鸭AI问答</div>
+    <div class="chat-header">南京云锦 · 金陵知鸭AI问答</div>
     <div class="chat-messages" id="messages"></div>
     <div class="chat-input">
         <input type="text" id="inputText" placeholder="请问关于南京云锦想了解什么？比如：云锦的历史、工艺、非遗故事...">
@@ -257,100 +313,143 @@ body {
 </div>
 
 <script>
+// 返回首页函数（修改这里的URL为你的首页地址）
+function goToHomePage() {
+    // 替换成你的首页实际URL，比如：https://www.xxx.com/home
+    window.location.href = "index.html";
+}
+
+// ==================== 主页面聊天 → DeepSeek AI ====================
 const messages = document.getElementById('messages');
 const inputText = document.getElementById('inputText');
 const sendBtn = document.getElementById('sendBtn');
 
-// 初始化Coze智能体实例
-let cozeChatInstance = null;
+addMsg("你好！我是金陵知鸭，专注解答南京云锦的一切问题～", false);
 
-// 初始欢迎语
-addMsg("你好！我是织鸭，专注解答南京云锦的一切问题～", false);
-
-// 添加消息到聊天窗口
+// 优化后的消息添加函数（支持Markdown解析）
 function addMsg(text, isUser) {
     const div = document.createElement('div');
     div.className = isUser ? 'msg user-msg' : 'msg ai-msg';
-    div.textContent = text;
+    
+    if (isUser) {
+
+        // 用户消息保持纯文本
+        div.textContent = text;
+    } else {
+        // AI消息解析Markdown并美化
+        let html = text
+            // 处理标题 ### 标题 → <h3>标题</h3>
+            .replace(/### (.*?)(?=\n|$)/g, '<h3>$1</h3>')
+            // 处理二级标题 ## 标题 → <h4>标题</h4>
+            .replace(/## (.*?)(?=\n|$)/g, '<h4>$1</h4>')
+            // 处理加粗 **文字** → <strong>文字</strong>
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            // 处理【重点】→ 高亮样式
+            .replace(/【(.*?)】/g, '<span data-type="highlight">$1</span>')
+            // 处理分段换行
+            .split('\n\n').map(para => para.trim() ? `<p>${para}</p>` : '').join('')
+            // 处理单行换行
+            .replace(/\n(?!<\/li>)/g, '<br>')
+            // 处理无序列表 - 内容 → <li>内容</li>
+            .replace(/- (.*?)(?=\n|$)/g, '<li>$1</li>')
+            // 包裹连续列表项
+            .replace(/(<li>.*?<\/li>)+/g, '<ul>$&</ul>');
+        
+        // 清理空标签
+        html = html.replace(/<p><\/p>/g, '').replace(/<ul><\/ul>/g, '');
+        div.innerHTML = html || text;
+    }
+    
     messages.appendChild(div);
     messages.scrollTop = messages.scrollHeight;
 }
 
-// 发送消息处理逻辑
-function send() {
+async function sendToDeepSeek() {
     const text = inputText.value.trim();
     if (!text) return;
-    
-    // 添加用户消息
+
     addMsg(text, true);
     inputText.value = '';
-    
-    // 显示加载状态
+
     const loading = document.createElement('div');
     loading.className = 'msg ai-msg';
-    loading.textContent = '金陵知鸭正在查询中...';
+    loading.textContent = '金陵知鸭正在思考...';
     messages.appendChild(loading);
     messages.scrollTop = messages.scrollHeight;
 
-    // 如果Coze实例已初始化，调用真实接口；否则使用模拟回答
-    if (cozeChatInstance) {
-        cozeChatInstance.sendMessage({ content: text }).then(res => {
-            messages.removeChild(loading);
-            addMsg(res.content, false);
-        }).catch(err => {
-            messages.removeChild(loading);
-            addMsg("抱歉，暂时无法回答你的问题，请稍后再试～", false);
-            console.error('Coze请求失败：', err);
+    try {
+        const response = await fetch("https://api.deepseek.com/chat/completions", {
+            method: "POST",
+            mode: "cors",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer sk-8bd539e141014212be01fc78347aa5e3"
+            },
+            body: JSON.stringify({
+                model: "deepseek-chat",
+                messages: [
+                    {
+                        role: "system",
+                        content: `你是织鸭，专业讲解南京云锦文化、历史、工艺。回答要求：
+1. 结构清晰：分点分段，用### 标题区分大模块，- 开头列小点
+2. 重点突出：核心信息用【】括起来（比如【寸锦寸金】）
+3. 语言简洁：避免冗长，每段不超过2行，适合聊天框阅读
+4. 纯文本输出：不要用HTML、Markdown复杂符号，只用###、-、【】这三种符号`
+                    },
+                    { role: "user", content: text }
+                ],
+                temperature: 0.7,
+                stream: false
+            })
         });
-    } else {
-        // 模拟回答（备用）
-        setTimeout(() => {
-            messages.removeChild(loading);
-            let reply = "南京云锦是中国四大名锦之首，拥有1600多年历史，2009年入选人类非物质文化遗产名录。";
-            if (text.includes('历史')) {
-                reply = "南京云锦最早可追溯至东晋的斗场锦署，明清时期达到鼎盛，江宁织造府是当时的核心织造机构，《红楼梦》中就有多处云锦相关描写。";
-            } else if (text.includes('工艺')) {
-                reply = "云锦采用大花楼木织机织造，需拽花工和织手配合，一日仅能织5-6厘米，顶级妆花工艺会用到真金、孔雀羽等珍贵材料，素有'寸锦寸金'之称。";
-            } else if (text.includes('非遗')) {
-                reply = "2009年，南京云锦织造技艺被列入《人类非物质文化遗产代表作名录》，如今不仅作为国礼走向世界，还开发出各类文创产品，让千年技艺焕发新生。";
-            }
-            addMsg(reply, false);
-        }, 800);
+
+        if (!response.ok) {
+            throw new Error(`API请求失败：${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        messages.removeChild(loading);
+        
+        const ans = data.choices?.[0]?.message?.content || "抱歉，暂时无法回答";
+        addMsg(ans, false);
+
+    } catch (err) {
+        messages.removeChild(loading);
+        console.error('DeepSeek调用错误：', err);
+        
+        if (err.message.includes('401')) {
+            addMsg("API Key 无效或过期，请检查你的Key是否正确～", false);
+        } else if (err.message.includes('CORS') || err.message.includes('跨域')) {
+            addMsg("跨域拦截！请通过后端转发API请求～", false);
+        } else {
+            addMsg(`请求失败：${err.message}`, false);
+        }
     }
 }
 
-// 绑定发送事件
-sendBtn.addEventListener('click', send);
+sendBtn.addEventListener('click', sendToDeepSeek);
 inputText.addEventListener('keydown', e => {
-    if (e.key === 'Enter') send();
+    if (e.key === 'Enter') sendToDeepSeek();
 });
+</script>
 
-// 初始化Coze智能体（用指定的鸭子图片作为头像）
+<!-- ==================== 右下角悬浮按钮 → Coze AI ==================== -->
+<script>
 document.addEventListener('DOMContentLoaded', function() {
-    // 加载Coze SDK并初始化
     const script = document.createElement('script');
     script.src = "https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.2.0-beta.19/libs/cn/index.js";
     script.onload = function() {
-        cozeChatInstance = new CozeWebSDK.WebChatClient({
-            config: {
-                bot_id: '7618176804423335974',
-            },
+        new CozeWebSDK.WebChatClient({
+            config: { bot_id: '7618176804423335974' },
             componentProps: {
                 title: '织鸭',
                 showAvatar: true,
-                // 智能体头像替换为指定鸭子图
                 avatarUrl: 'https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/b0c4c12063654a8aa6bd0449b9316359.jpg~tplv-a9rns2rl98-image.png?lk3s=8e244e95&rcl=20260317225045C56B0BBBDA60533C3EB7&rrcfp=dafada99&x-expires=2089983045&x-signature=abSwiFBSaQs%2BIaRm2J3f%2BeSWPjA%3D'
             },
             auth: {
                 type: 'token',
                 token: 'pat_AP0CTNtsTrtSE9EiuCiwC1YDut9hyXgRm2t0GdvNZJtA9rQa1dKtEnRwf5YGS45J',
-                onRefreshToken: function () {
-                    return 'pat_AP0CTNtsTrtSE9EiuCiwC1YDut9hyXgRm2t0GdvNZJtA9rQa1dKtEnRwf5YGS45J'
-                }
-            },
-            onReady: function(instance) {
-                cozeChatInstance = instance;
-                addMsg("智能体已就绪，可随时提问～", false);
+                onRefreshToken: () => 'pat_AP0CTNtsTrtSE9EiuCiwC1YDut9hyXgRm2t0GdvNZJtA9rQa1dKtEnRwf5YGS45J'
             }
         });
     };
